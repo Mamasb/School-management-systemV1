@@ -1,26 +1,26 @@
-// RegistrationForm.js
+// RegisterForm.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';  // For redirection after registration
+import { useNavigate } from 'react-router-dom';
 import './styles.css';
 
-const RegistrationForm = () => {
+const RegisterForm = () => {
   const [formData, setFormData] = useState({
     firstName: '',
     middleName: '',
     familyName: '',
     password: '',
     confirmPassword: '',
-    userType: 'Baby Class', // Default
+    userType: 'Baby Class', // Default user type
   });
 
-  const navigate = useNavigate(); // For redirecting
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
     // Validation
@@ -40,14 +40,16 @@ const RegistrationForm = () => {
       return;
     }
 
-    // Store user's full name in localStorage
+    // Store full name and user type in local storage
     const fullName = `${formData.firstName} ${formData.middleName} ${formData.familyName}`;
     localStorage.setItem('fullName', fullName);
-    localStorage.setItem('userType', formData.userType);  // Store user type
+    localStorage.setItem('userType', formData.userType);
 
     // Redirect based on userType
-    if (['Baby Class', 'PP1', 'PP2'].includes(formData.userType)) {
-      navigate('/services'); // Redirect to services page for younger classes
+    if (formData.userType === 'Baby Class') {
+      navigate('/baby-class-services'); // Redirect to customized services for Baby Class
+    } else if (['PP1', 'PP2'].includes(formData.userType)) {
+      navigate('/pp-services'); // Redirect to customized services for PP1 and PP2
     } else {
       navigate('/book-interview'); // Redirect to book interview for Grades 1-9
     }
@@ -61,33 +63,48 @@ const RegistrationForm = () => {
           type="text"
           name="firstName"
           placeholder="First Name"
+          value={formData.firstName}
           onChange={handleChange}
+          required
         />
         <input
           type="text"
           name="middleName"
           placeholder="Middle Name"
+          value={formData.middleName}
           onChange={handleChange}
+          required
         />
         <input
           type="text"
           name="familyName"
           placeholder="Family Name"
+          value={formData.familyName}
           onChange={handleChange}
+          required
         />
         <input
           type="password"
           name="password"
           placeholder="Password"
+          value={formData.password}
           onChange={handleChange}
+          required
         />
         <input
           type="password"
           name="confirmPassword"
           placeholder="Confirm Password"
+          value={formData.confirmPassword}
           onChange={handleChange}
+          required
         />
-        <select name="userType" onChange={handleChange}>
+        <select
+          name="userType"
+          value={formData.userType}
+          onChange={handleChange}
+          required
+        >
           <option value="Baby Class">Baby Class</option>
           <option value="PP1">PP1</option>
           <option value="PP2">PP2</option>
@@ -107,4 +124,4 @@ const RegistrationForm = () => {
   );
 };
 
-export default RegistrationForm;
+export default RegisterForm;

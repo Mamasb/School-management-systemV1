@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LandingPage/landingpage';
 import RegistrationForm from './pages/Registration/RegistrationForm';
-
 import LoginForm from './pages/Registration/LoginForm';
-import ServicesPage from './pages/Registration/ServicesPage';  // New ServicesPage component
+import ServicesPage from './pages/Registration/ServicesPage';
+import BabyClassServices from './pages/Registration/BabyClassServices';  // Baby Class service page
+import PPServices from './pages/Registration/ServicesPage';  // PP1 & PP2 service page
+import BookInterview from './pages/Registration/BookInterview';  // Grades 1-9 interview page
 import './App.css';
 
 import AppBar from './components/AppBar/AppBar';
@@ -13,43 +15,42 @@ import Footer from './components/Footer/Footer';
 
 function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [userFullName, setUserFullName] = useState(null);  // Track the full name
+  const [userFullName, setUserFullName] = useState(null);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
   useEffect(() => {
-    // Retrieve user's full name from localStorage if available
     const name = localStorage.getItem('fullName');
     if (name) {
       setUserFullName(name);
+    } else {
+      setUserFullName('Guest'); // Fallback to "Guest" if no name is found
     }
   }, []);
 
   return (
-    <Router> {/* Only one Router should wrap the entire app */}
+    <Router>
       <div className="app">
-        {/* AppBar with a button to toggle the sidebar */}
         <AppBar toggleSidebar={toggleSidebar} />
 
         <div className="main-content">
-          {/* Sidebar that opens/closes based on state */}
-          <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+          <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} userFullName={userFullName} />
 
           <div className="content-area">
-            {/* Routes for different pages */}
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/register" element={<RegistrationForm />} />
               <Route path="/login" element={<LoginForm />} />
-              <Route path="/services" element={<ServicesPage />} />
-              {/* Add other routes here */}
+              <Route path="/services" element={<ServicesPage userFullName={userFullName} />} />
+              <Route path="/baby-class-services" element={<BabyClassServices />} />
+              <Route path="/pp-services" element={<PPServices />} />
+              <Route path="/book-interview" element={<BookInterview />} />
             </Routes>
           </div>
         </div>
 
-        {/* Footer component */}
         <Footer />
       </div>
     </Router>
