@@ -36,7 +36,11 @@ function App() {
         <AppBar toggleSidebar={toggleSidebar} />
 
         <div className="main-content">
-          <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} userFullName={userFullName} />
+          <Sidebar
+            isOpen={isSidebarOpen}
+            toggleSidebar={toggleSidebar}
+            userFullName={userFullName}
+          />
 
           <div className="content-area">
             <Routes>
